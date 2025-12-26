@@ -38,8 +38,21 @@ public class DetectorEmergencia {
 
             EventoEmergencia evento = new EventoEmergencia(tipoDeteccion, ubicacion, datos);
 
+            // FEATURE: confirmación para evitar falsos positivos
+            if (!confirmarEmergencia()) {
+                System.out.println("Emergencia cancelada.");
+                return null;
+            }
+
             return evento;
         }
         return null;
     }
+
+    private boolean confirmarEmergencia() {
+        System.out.print("¿Confirmas la emergencia? (S/N): ");
+        String respuesta = sc.nextLine().trim();
+        return respuesta.equalsIgnoreCase("S");
+    }
+
 }
