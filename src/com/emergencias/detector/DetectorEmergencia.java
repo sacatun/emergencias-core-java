@@ -17,9 +17,7 @@ public class DetectorEmergencia {
 
     public EventoEmergencia detectarEmergencia(
     ) {
-        System.out.print("Introduce un nivel de emergencia (0–10): ");
-        int nivelIntroducido = sc.nextInt();
-        sc.nextLine(); // Limpiamos buffer
+        int nivelIntroducido = leerEnteroEnRango("Introduce un nivel de emergencia (0-10): ", 0, 10);
 
         if (nivelIntroducido >= umbralSensibilidad) {
             System.out.print("Introduce ubicación: ");
@@ -54,5 +52,24 @@ public class DetectorEmergencia {
         String respuesta = sc.nextLine().trim();
         return respuesta.equalsIgnoreCase("S");
     }
+
+    private int leerEnteroEnRango(String mensaje, int min, int max) {
+        while (true) {
+            System.out.print(mensaje);
+            String linea = sc.nextLine().trim();
+
+            try {
+                int valor = Integer.parseInt(linea);
+                if (valor < min || valor > max) {
+                    System.out.println("Valor fuera de rango. Debe estar entre " + min + " y " + max + ".");
+                    continue;
+                }
+                return valor;
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Introduce un número.");
+            }
+        }
+    }
+
 
 }
