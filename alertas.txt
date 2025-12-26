@@ -1,0 +1,18 @@
+=== ALERTA ===
+Fecha/hora: 2025-11-30T12:34:34.791681500
+Destino: 112 | Método: SMS
+Tipo de emergencia: Incendio
+Ubicación: Elche
+Nombre usuario: Roberto
+Teléfono: 6465465646
+Email: roboeorsaodfosadf
+------------------------
+=== ALERTA ===
+Fecha/hora: 2025-12-26T11:37:51.546976300
+Destino: 112 | Método: SMS
+Tipo de emergencia: Incendio
+Ubicación: dsh
+Nombre usuario: eafs
+Teléfono: gsfdgas
+Email: fdgsadfg
+------------------------
