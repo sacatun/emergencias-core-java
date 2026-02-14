@@ -16,3 +16,12 @@ Nombre usuario: eafs
 Teléfono: gsfdgas
 Email: fdgsadfg
 ------------------------
+=== ALERTA ===
+Fecha/hora: 2026-02-14T10:24:24.413021900
+Destino: 112 | Método: SMS
+Tipo de emergencia: Incendio
+Ubicación: 65
+Nombre usuario: 
+Teléfono: 545
+Email: 465
+------------------------

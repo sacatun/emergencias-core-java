@@ -4,8 +4,33 @@ import com.emergencias.alerta.EnviadorAlertas;
 import com.emergencias.controlador.GestorEmergencias;
 import com.emergencias.detector.DetectorEmergencia;
 
+import com.emergencias.datos.CargadorCentrosSalud;
+import com.emergencias.modelo.CentroSalud;
+
+import java.util.ArrayList;
+
 public class AplicacionPrincipal {
     public static void main(String[] args) {
+
+        // --- Carga de datos externos (JSON) ---
+        ArrayList<CentroSalud> centros;
+        try {
+            centros = CargadorCentrosSalud.cargar();
+            System.out.println("Centros de salud cargados desde JSON: " + centros.size());
+            System.out.println("Ejemplo (primeros 3):");
+            for (int i = 0; i < Math.min(3, centros.size()); i++) {
+                System.out.println(" - " + centros.get(i));
+            }
+            long centrosMurcia = centros.stream()
+                    .filter(c -> "Murcia".equalsIgnoreCase(c.getMunicipio()))
+                    .count();
+            System.out.println("Centros en el municipio 'Murcia': " + centrosMurcia);
+            System.out.println("--------------------------------------");
+        } catch (RuntimeException ex) {
+            System.out.println("No se pudieron cargar los centros desde JSON: " + ex.getMessage());
+            System.out.println("--------------------------------------");
+            centros = new ArrayList<>();
+        }
 
         // Creamos los objetos con los parámetros de cada clase
         DetectorEmergencia detector = new DetectorEmergencia("Incendio", 5);

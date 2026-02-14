@@ -1,5 +1,6 @@
 package com.emergencias.simple;
 
+
 public class AplicacionSimple {
     public static void main(String[] args) {
         DetectorSimple detector = new DetectorSimple();
