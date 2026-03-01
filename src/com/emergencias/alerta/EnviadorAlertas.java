@@ -5,6 +5,7 @@ import com.emergencias.modelo.EventoEmergencia;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 public class EnviadorAlertas {
@@ -34,7 +35,9 @@ public class EnviadorAlertas {
 
         System.out.println("========================");
 
-        try (FileWriter writer = new FileWriter(rutaArchivolog, true)) {
+        // MEJORA: se especifica UTF-8 explícitamente para evitar corrupción de caracteres especiales
+        // (tildes, ñ, etc.) en sistemas Windows donde el encoding por defecto es Windows-1252
+        try (FileWriter writer = new FileWriter(rutaArchivolog, StandardCharsets.UTF_8, true)) {
             writer.write("=== ALERTA ===" + System.lineSeparator());
             writer.write("Fecha/hora: " + LocalDateTime.now() + System.lineSeparator());
             writer.write("Destino: " + destino + " | Método: " + metodoEnvio + System.lineSeparator());
