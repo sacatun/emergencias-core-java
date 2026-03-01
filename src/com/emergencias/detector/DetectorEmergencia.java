@@ -6,11 +6,15 @@ import com.emergencias.modelo.EventoEmergencia;
 import java.util.Scanner;
 
 public class DetectorEmergencia {
-    Scanner sc = new Scanner(System.in);
+    // MEJORA: sc era package-private (sin modificador) y se creaba internamente con new Scanner(System.in).
+    // Ahora es private y se recibe desde fuera para que haya un único Scanner en toda la aplicación.
+    // Cerrar un Scanner sobre System.in cierra el propio System.in, por eso se gestiona desde el main.
+    private Scanner sc;
     private String tipoDeteccion;
     private int umbralSensibilidad;
 
-    public DetectorEmergencia(String tipoDeteccion, int umbralSensibilidad) {
+    public DetectorEmergencia(Scanner sc, String tipoDeteccion, int umbralSensibilidad) {
+        this.sc = sc;
         this.tipoDeteccion = tipoDeteccion;
         this.umbralSensibilidad = umbralSensibilidad;
     }
