@@ -2,24 +2,26 @@ package com.emergencias.detector;
 
 import com.emergencias.modelo.DatosUsuario;
 import com.emergencias.modelo.EventoEmergencia;
+import com.emergencias.modelo.TipoEmergencia;
 
 import java.util.Scanner;
 
 public class DetectorEmergencia {
     Scanner sc = new Scanner(System.in);
-    private String tipoDeteccion;
+    // MEJORA: eliminado tipoDeteccion del constructor, ahora el usuario lo elige en tiempo de ejecución
     private int umbralSensibilidad;
 
-    public DetectorEmergencia(String tipoDeteccion, int umbralSensibilidad) {
-        this.tipoDeteccion = tipoDeteccion;
+    public DetectorEmergencia(int umbralSensibilidad) {
         this.umbralSensibilidad = umbralSensibilidad;
     }
 
-    public EventoEmergencia detectarEmergencia(
-    ) {
+    public EventoEmergencia detectarEmergencia() {
         int nivelIntroducido = leerEnteroEnRango("Introduce un nivel de emergencia (0-10): ", 0, 10);
 
         if (nivelIntroducido >= umbralSensibilidad) {
+            // MEJORA: el tipo de emergencia lo elige el usuario entre los valores del enum TipoEmergencia
+            TipoEmergencia tipo = elegirTipoEmergencia();
+
             System.out.print("Introduce ubicación: ");
             String ubicacion = sc.nextLine();
 
@@ -35,7 +37,7 @@ public class DetectorEmergencia {
             DatosUsuario datos = new DatosUsuario(nombre, telefono, email);
 
             // MEJORA: se pasa nivelIntroducido al evento para que no se pierda
-            EventoEmergencia evento = new EventoEmergencia(tipoDeteccion, ubicacion, datos, nivelIntroducido);
+            EventoEmergencia evento = new EventoEmergencia(tipo, ubicacion, datos, nivelIntroducido);
 
             // FEATURE: confirmación para evitar falsos positivos
             if (!confirmarEmergencia()) {
@@ -46,6 +48,17 @@ public class DetectorEmergencia {
             return evento;
         }
         return null;
+    }
+
+    // MEJORA: muestra los tipos disponibles del enum y devuelve el elegido por el usuario
+    private TipoEmergencia elegirTipoEmergencia() {
+        TipoEmergencia[] tipos = TipoEmergencia.values();
+        System.out.println("Selecciona el tipo de emergencia:");
+        for (int i = 0; i < tipos.length; i++) {
+            System.out.println("  " + (i + 1) + ". " + tipos[i].getDescripcion());
+        }
+        int opcion = leerEnteroEnRango("Opción: ", 1, tipos.length);
+        return tipos[opcion - 1];
     }
 
     private boolean confirmarEmergencia() {
