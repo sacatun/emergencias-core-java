@@ -8,6 +8,7 @@ import com.emergencias.datos.CargadorCentrosSalud;
 import com.emergencias.modelo.CentroSalud;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class AplicacionPrincipal {
     public static void main(String[] args) {
@@ -32,9 +33,15 @@ public class AplicacionPrincipal {
             centros = new ArrayList<>();
         }
 
+        // MEJORA: Scanner único para toda la aplicación, se pasa como parámetro en lugar de
+        // que cada clase cree el suyo propio sobre System.in (lo que causaría múltiples instancias)
+        Scanner sc = new Scanner(System.in);
+
         // Creamos los objetos con los parámetros de cada clase
-        DetectorEmergencia detector = new DetectorEmergencia("Incendio", 5);
-        EnviadorAlertas enviador = new EnviadorAlertas("112", "alertas.txt", "SMS");
+        // MEJORA: eliminado "Incendio" hardcodeado, ahora el usuario elige el tipo en tiempo de ejecución
+        DetectorEmergencia detector = new DetectorEmergencia(sc, 5);
+        // MEJORA: log movido a logs/alertas.log para separar archivos de log del código fuente
+        EnviadorAlertas enviador = new EnviadorAlertas("112", "logs/alertas.log", "SMS");
 
         // Creamos el objeto gestor con lo ya creado: detector y enviador
         GestorEmergencias gestor = new GestorEmergencias(detector, enviador);
