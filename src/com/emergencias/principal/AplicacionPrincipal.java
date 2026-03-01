@@ -40,7 +40,8 @@ public class AplicacionPrincipal {
         // Creamos los objetos con los parámetros de cada clase
         // MEJORA: eliminado "Incendio" hardcodeado, ahora el usuario elige el tipo en tiempo de ejecución
         DetectorEmergencia detector = new DetectorEmergencia(sc, 5);
-        EnviadorAlertas enviador = new EnviadorAlertas("112", "alertas.txt", "SMS");
+        // MEJORA: log movido a logs/alertas.log para separar archivos de log del código fuente
+        EnviadorAlertas enviador = new EnviadorAlertas("112", "logs/alertas.log", "SMS");
 
         // Creamos el objeto gestor con lo ya creado: detector y enviador
         GestorEmergencias gestor = new GestorEmergencias(detector, enviador);

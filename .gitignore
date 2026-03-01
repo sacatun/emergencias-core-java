@@ -29,6 +29,12 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+### Logs ###
+# Los archivos de log no deben versionarse: contienen datos de prueba y varían en cada ejecución
+logs/
+*.log
+alertas.txt
+
 .idea/
 out/
 *.iml
