@@ -34,7 +34,8 @@ public class DetectorEmergencia {
 
             DatosUsuario datos = new DatosUsuario(nombre, telefono, email);
 
-            EventoEmergencia evento = new EventoEmergencia(tipoDeteccion, ubicacion, datos);
+            // MEJORA: se pasa nivelIntroducido al evento para que no se pierda
+            EventoEmergencia evento = new EventoEmergencia(tipoDeteccion, ubicacion, datos, nivelIntroducido);
 
             // FEATURE: confirmación para evitar falsos positivos
             if (!confirmarEmergencia()) {

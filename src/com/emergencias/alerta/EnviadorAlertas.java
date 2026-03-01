@@ -23,6 +23,8 @@ public class EnviadorAlertas {
         System.out.println("Destino: " + destino + " | Método: " + metodoEnvio);
 
         System.out.println("Tipo de emergencia: " + evento.getTipoEmergencia());
+        // MEJORA: se muestra el nivel de emergencia, antes se perdía al crear el evento
+        System.out.println("Nivel de emergencia: " + evento.getNivelEmergencia());
         System.out.println("Ubicacion: " + evento.getUbicacion());
 
         DatosUsuario usuario = evento.getDatosUsuario();
