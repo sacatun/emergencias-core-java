@@ -1,44 +1,44 @@
 package com.emergencias.principal;
 
 import com.emergencias.alerta.EnviadorAlertas;
+import com.emergencias.asistencia.ProtocoloPrimerosAuxilios;
 import com.emergencias.controlador.GestorEmergencias;
 import com.emergencias.detector.DetectorEmergencia;
-
-import com.emergencias.datos.CargadorCentrosSalud;
-import com.emergencias.modelo.CentroSalud;
-
-import java.util.ArrayList;
+import com.emergencias.inventario.InventarioVehiculo;
+import com.emergencias.recursos.LocalizadorRecursos;
 
 public class AplicacionPrincipal {
+
     public static void main(String[] args) {
 
-        // --- Carga de datos externos (JSON) ---
-        ArrayList<CentroSalud> centros;
-        try {
-            centros = CargadorCentrosSalud.cargar();
-            System.out.println("Centros de salud cargados desde JSON: " + centros.size());
-            System.out.println("Ejemplo (primeros 3):");
-            for (int i = 0; i < Math.min(3, centros.size()); i++) {
-                System.out.println(" - " + centros.get(i));
-            }
-            long centrosMurcia = centros.stream()
-                    .filter(c -> "Murcia".equalsIgnoreCase(c.getMunicipio()))
-                    .count();
-            System.out.println("Centros en el municipio 'Murcia': " + centrosMurcia);
-            System.out.println("--------------------------------------");
-        } catch (RuntimeException ex) {
-            System.out.println("No se pudieron cargar los centros desde JSON: " + ex.getMessage());
-            System.out.println("--------------------------------------");
-            centros = new ArrayList<>();
-        }
+        // --- Inicialización de componentes del sistema ---
 
-        // Creamos los objetos con los parámetros de cada clase
-        DetectorEmergencia detector = new DetectorEmergencia("Incendio", 5);
-        EnviadorAlertas enviador = new EnviadorAlertas("112", "alertas.txt", "SMS");
+        DetectorEmergencia detector = new DetectorEmergencia("Accidente de tráfico", 5);
 
-        // Creamos el objeto gestor con lo ya creado: detector y enviador
-        GestorEmergencias gestor = new GestorEmergencias(detector, enviador);
+        EnviadorAlertas enviador = new EnviadorAlertas(
+                "112",
+                "alertas.txt",
+                "SMS"
+        );
 
+        ProtocoloPrimerosAuxilios protocolo = new ProtocoloPrimerosAuxilios();
+
+        LocalizadorRecursos localizador = new LocalizadorRecursos();
+
+        InventarioVehiculo inventario = new InventarioVehiculo();
+
+
+        // --- Gestor principal del sistema ---
+        GestorEmergencias gestor = new GestorEmergencias(
+                detector,
+                enviador,
+                protocolo,
+                localizador,
+                inventario
+        );
+
+
+        // --- Inicio del sistema ---
         gestor.iniciarSistema();
     }
 }
