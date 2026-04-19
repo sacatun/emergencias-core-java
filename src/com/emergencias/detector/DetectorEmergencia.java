@@ -3,10 +3,7 @@ package com.emergencias.detector;
 import com.emergencias.modelo.EventoEmergencia;
 import com.emergencias.modelo.FichaMedica;
 
-import java.util.Scanner;
-
 public class DetectorEmergencia {
-    private final Scanner sc = new Scanner(System.in);
     private String tipoDeteccion;
     private int umbralSensibilidad;
 
@@ -15,84 +12,52 @@ public class DetectorEmergencia {
         this.umbralSensibilidad = umbralSensibilidad;
     }
 
-    public EventoEmergencia detectarEmergencia() {
-        int nivelIntroducido = leerEnteroEnRango("Introduce un nivel de emergencia (0-10): ", 0, 10);
+    public EventoEmergencia detectarEmergencia(int nivelIntroducido,
+                                               String ubicacion,
+                                               FichaMedica fichaMedica,
+                                               boolean confirmada) {
 
-        if (nivelIntroducido >= umbralSensibilidad) {
-            String gravedad = calcularGravedad(nivelIntroducido);
+        validarNivelEnRango(nivelIntroducido, 0, 10);
+        validarTextoNoVacio(ubicacion, "La ubicación no puede estar vacía.");
+        validarFichaMedica(fichaMedica);
 
-            System.out.print("Introduce ubicación: ");
-            String ubicacion = sc.nextLine();
-
-            System.out.println("=== Identificación biomédica simulada ===");
-
-            System.out.print("Introduce nombre del paciente: ");
-            String nombre = sc.nextLine();
-
-            System.out.print("Introduce teléfono: ");
-            String telefono = sc.nextLine();
-
-            System.out.print("Introduce grupo sanguíneo: ");
-            String grupoSanguineo = sc.nextLine();
-
-            System.out.print("Introduce alergias: ");
-            String alergias = sc.nextLine();
-
-            System.out.print("Introduce medicación: ");
-            String medicacion = sc.nextLine();
-
-            System.out.print("Introduce contacto de emergencia: ");
-            String contactoEmergencia = sc.nextLine();
-
-            FichaMedica fichaMedica = new FichaMedica(
-                    nombre,
-                    telefono,
-                    grupoSanguineo,
-                    alergias,
-                    medicacion,
-                    contactoEmergencia
-            );
-
-            EventoEmergencia evento = new EventoEmergencia(
-                    tipoDeteccion,
-                    ubicacion,
-                    gravedad,
-                    fichaMedica
-            );
-
-            if (!confirmarEmergencia()) {
-                System.out.println("Emergencia cancelada.");
-                return null;
-            }
-
-            return evento;
+        if (nivelIntroducido < umbralSensibilidad || !confirmada) {
+            return null;
         }
 
-        return null;
+        String gravedad = calcularGravedad(nivelIntroducido);
+
+        return new EventoEmergencia(
+                tipoDeteccion,
+                ubicacion.trim(),
+                gravedad,
+                fichaMedica
+        );
     }
 
-    private boolean confirmarEmergencia() {
-        System.out.print("¿Confirmas la emergencia? (S/N): ");
-        String respuesta = sc.nextLine().trim();
-        return respuesta.equalsIgnoreCase("S");
-    }
-
-    private int leerEnteroEnRango(String mensaje, int min, int max) {
-        while (true) {
-            System.out.print(mensaje);
-            String linea = sc.nextLine().trim();
-
-            try {
-                int valor = Integer.parseInt(linea);
-                if (valor < min || valor > max) {
-                    System.out.println("Valor fuera de rango. Debe estar entre " + min + " y " + max + ".");
-                    continue;
-                }
-                return valor;
-            } catch (NumberFormatException e) {
-                System.out.println("Entrada inválida. Introduce un número.");
-            }
+    private void validarNivelEnRango(int valor, int min, int max) {
+        if (valor < min || valor > max) {
+            throw new IllegalArgumentException("El nivel de emergencia debe estar entre " + min + " y " + max + ".");
         }
+    }
+
+    private void validarTextoNoVacio(String texto, String mensajeError) {
+        if (texto == null || texto.trim().isEmpty()) {
+            throw new IllegalArgumentException(mensajeError);
+        }
+    }
+
+    private void validarFichaMedica(FichaMedica fichaMedica) {
+        if (fichaMedica == null) {
+            throw new IllegalArgumentException("La ficha médica no puede ser nula.");
+        }
+
+        validarTextoNoVacio(fichaMedica.getNombre(), "El nombre del paciente no puede estar vacío.");
+        validarTextoNoVacio(fichaMedica.getTelefono(), "El teléfono no puede estar vacío.");
+        validarTextoNoVacio(fichaMedica.getGrupoSanguineo(), "El grupo sanguíneo no puede estar vacío.");
+        validarTextoNoVacio(fichaMedica.getAlergias(), "Las alergias no pueden estar vacías.");
+        validarTextoNoVacio(fichaMedica.getMedicacion(), "La medicación no puede estar vacía.");
+        validarTextoNoVacio(fichaMedica.getContactoEmergencia(), "El contacto de emergencia no puede estar vacío.");
     }
 
     private String calcularGravedad(int nivelIntroducido) {

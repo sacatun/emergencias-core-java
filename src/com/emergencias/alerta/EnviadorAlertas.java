@@ -18,38 +18,33 @@ public class EnviadorAlertas {
         this.metodoEnvio = metodoEnvio;
     }
 
-    public void enviarAlerta(EventoEmergencia evento) {
-        System.out.println("=== Enviando alerta ===");
-        System.out.println("Destino: " + destino + " | Método: " + metodoEnvio);
-        System.out.println("Tipo de emergencia: " + evento.getTipoEmergencia());
-        System.out.println("Ubicación: " + evento.getUbicacion());
-        System.out.println("Gravedad: " + evento.getGravedad());
-
+    public String generarResumenAlerta(EventoEmergencia evento) {
         FichaMedica ficha = evento.getFichaMedica();
-        System.out.println("Paciente identificado: " + ficha.getNombre());
-        System.out.println("Teléfono: " + ficha.getTelefono());
-        System.out.println("Grupo sanguíneo: " + ficha.getGrupoSanguineo());
-        System.out.println("Alergias: " + ficha.getAlergias());
-        System.out.println("Medicación: " + ficha.getMedicacion());
-        System.out.println("Contacto de emergencia: " + ficha.getContactoEmergencia());
-        System.out.println("========================");
+
+        return "=== ENVIANDO ALERTA ===\n" +
+                "Destino: " + destino + " | Método: " + metodoEnvio + "\n" +
+                "Tipo de emergencia: " + evento.getTipoEmergencia() + "\n" +
+                "Ubicación: " + evento.getUbicacion() + "\n" +
+                "Gravedad: " + evento.getGravedad() + "\n" +
+                "Paciente identificado: " + ficha.getNombre() + "\n" +
+                "Teléfono: " + ficha.getTelefono() + "\n" +
+                "Grupo sanguíneo: " + ficha.getGrupoSanguineo() + "\n" +
+                "Alergias: " + ficha.getAlergias() + "\n" +
+                "Medicación: " + ficha.getMedicacion() + "\n" +
+                "Contacto de emergencia: " + ficha.getContactoEmergencia() + "\n" +
+                "========================";
+    }
+
+    public void enviarAlerta(EventoEmergencia evento) {
+        String resumen = generarResumenAlerta(evento);
 
         try (FileWriter writer = new FileWriter(rutaArchivoLog, true)) {
             writer.write("=== ALERTA ===" + System.lineSeparator());
             writer.write("Fecha/hora: " + LocalDateTime.now() + System.lineSeparator());
-            writer.write("Destino: " + destino + " | Método: " + metodoEnvio + System.lineSeparator());
-            writer.write("Tipo de emergencia: " + evento.getTipoEmergencia() + System.lineSeparator());
-            writer.write("Ubicación: " + evento.getUbicacion() + System.lineSeparator());
-            writer.write("Gravedad: " + evento.getGravedad() + System.lineSeparator());
-            writer.write("Paciente identificado: " + ficha.getNombre() + System.lineSeparator());
-            writer.write("Teléfono: " + ficha.getTelefono() + System.lineSeparator());
-            writer.write("Grupo sanguíneo: " + ficha.getGrupoSanguineo() + System.lineSeparator());
-            writer.write("Alergias: " + ficha.getAlergias() + System.lineSeparator());
-            writer.write("Medicación: " + ficha.getMedicacion() + System.lineSeparator());
-            writer.write("Contacto de emergencia: " + ficha.getContactoEmergencia() + System.lineSeparator());
+            writer.write(resumen + System.lineSeparator());
             writer.write("------------------------" + System.lineSeparator());
         } catch (IOException e) {
-            System.err.println("Error al guardar la alerta en el archivo: " + e.getMessage());
+            throw new RuntimeException("Error al guardar la alerta en el archivo: " + e.getMessage(), e);
         }
     }
 }

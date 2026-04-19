@@ -15,30 +15,10 @@ public class LocalizadorRecursos {
         this.centros = CargadorCentrosSalud.cargar();
     }
 
-    public void mostrarCentrosPorMunicipio(String municipioBuscado) {
-        System.out.println();
-        System.out.println("=== RECURSOS SANITARIOS CERCANOS ===");
-
+    public List<CentroSalud> obtenerCentrosPorMunicipio(String municipioBuscado) {
         List<CentroSalud> encontrados = buscarPorMunicipio(municipioBuscado);
-
-        if (encontrados.isEmpty()) {
-            System.out.println("No se han encontrado centros de salud para el municipio: " + municipioBuscado);
-        } else {
-            int limite = Math.min(encontrados.size(), 3);
-            System.out.println("Mostrando hasta " + limite + " centros encontrados en " + municipioBuscado + ":");
-
-            for (int i = 0; i < limite; i++) {
-                CentroSalud centro = encontrados.get(i);
-                System.out.println((i + 1) + ". " + centro.getNombre());
-                System.out.println("   Dirección: " + valorSeguro(centro.getDireccion()));
-                System.out.println("   Municipio: " + valorSeguro(centro.getMunicipio()));
-                System.out.println("   Teléfono: " + valorSeguro(centro.getTelefono()));
-                System.out.println();
-            }
-        }
-
-        System.out.println("====================================");
-        System.out.println();
+        int limite = Math.min(encontrados.size(), 3);
+        return new ArrayList<>(encontrados.subList(0, limite));
     }
 
     private List<CentroSalud> buscarPorMunicipio(String municipioBuscado) {
@@ -64,6 +44,33 @@ public class LocalizadorRecursos {
                 .replaceAll("\\p{M}", "");
 
         return sinTildes.trim().toLowerCase();
+    }
+
+    public String formatearCentros(List<CentroSalud> centros, String municipioBuscado) {
+        StringBuilder resultado = new StringBuilder();
+        resultado.append("=== RECURSOS SANITARIOS CERCANOS ===\n");
+
+        if (centros == null || centros.isEmpty()) {
+            resultado.append("No se han encontrado centros de salud para el municipio: ")
+                    .append(municipioBuscado);
+        } else {
+            resultado.append("Mostrando hasta ")
+                    .append(centros.size())
+                    .append(" centros encontrados en ")
+                    .append(municipioBuscado)
+                    .append(":\n\n");
+
+            for (int i = 0; i < centros.size(); i++) {
+                CentroSalud centro = centros.get(i);
+                resultado.append(i + 1).append(". ").append(valorSeguro(centro.getNombre())).append("\n");
+                resultado.append("   Dirección: ").append(valorSeguro(centro.getDireccion())).append("\n");
+                resultado.append("   Municipio: ").append(valorSeguro(centro.getMunicipio())).append("\n");
+                resultado.append("   Teléfono: ").append(valorSeguro(centro.getTelefono())).append("\n\n");
+            }
+        }
+
+        resultado.append("====================================");
+        return resultado.toString();
     }
 
     private String valorSeguro(String valor) {

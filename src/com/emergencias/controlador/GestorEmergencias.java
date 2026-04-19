@@ -4,10 +4,13 @@ import com.emergencias.alerta.EnviadorAlertas;
 import com.emergencias.asistencia.ProtocoloPrimerosAuxilios;
 import com.emergencias.detector.DetectorEmergencia;
 import com.emergencias.inventario.InventarioVehiculo;
+import com.emergencias.modelo.CentroSalud;
 import com.emergencias.modelo.EventoEmergencia;
+import com.emergencias.modelo.FichaMedica;
+import com.emergencias.modelo.ResultadoEmergencia;
 import com.emergencias.recursos.LocalizadorRecursos;
 
-import java.util.Scanner;
+import java.util.List;
 
 public class GestorEmergencias {
     private final DetectorEmergencia detectorEmergencia;
@@ -15,7 +18,6 @@ public class GestorEmergencias {
     private final ProtocoloPrimerosAuxilios protocoloPrimerosAuxilios;
     private final LocalizadorRecursos localizadorRecursos;
     private final InventarioVehiculo inventarioVehiculo;
-    private final Scanner sc = new Scanner(System.in);
 
     public GestorEmergencias(DetectorEmergencia detectorEmergencia,
                              EnviadorAlertas enviadorAlertas,
@@ -29,53 +31,40 @@ public class GestorEmergencias {
         this.inventarioVehiculo = inventarioVehiculo;
     }
 
-    public void iniciarSistema() {
-        EventoEmergencia evento = detectorEmergencia.detectarEmergencia();
+    public ResultadoEmergencia procesarEmergencia(int nivel,
+                                                  String ubicacion,
+                                                  FichaMedica fichaMedica,
+                                                  boolean confirmada,
+                                                  String tipoAsistencia,
+                                                  String municipio) {
+
+        EventoEmergencia evento = detectorEmergencia.detectarEmergencia(
+                nivel,
+                ubicacion,
+                fichaMedica,
+                confirmada
+        );
 
         if (evento == null) {
-            System.out.println("No se ha detectado emergencia.");
-            return;
+            return null;
         }
-
-        System.out.println("¡¡¡ALERTA CONFIRMADA!!!");
-        System.out.println("Paciente identificado: " + evento.getFichaMedica().getNombre());
-        System.out.println("Gravedad detectada: " + evento.getGravedad());
-        System.out.println();
 
         enviadorAlertas.enviarAlerta(evento);
 
-        String tipoAsistencia = leerTipoAsistencia();
-        protocoloPrimerosAuxilios.mostrarProtocolo(tipoAsistencia);
-        inventarioVehiculo.mostrarRecursosDisponibles(tipoAsistencia, evento.getGravedad());
+        String resumenAlerta = enviadorAlertas.generarResumenAlerta(evento);
+        String protocolo = protocoloPrimerosAuxilios.obtenerProtocolo(tipoAsistencia);
+        String inventario = inventarioVehiculo.obtenerRecursosDisponibles(tipoAsistencia, evento.getGravedad());
 
-        String municipio = leerTextoNoVacio("Introduce el municipio para buscar centros de salud cercanos: ");
-        localizadorRecursos.mostrarCentrosPorMunicipio(municipio);
-    }
+        List<CentroSalud> centros = localizadorRecursos.obtenerCentrosPorMunicipio(municipio);
+        String textoCentros = localizadorRecursos.formatearCentros(centros, municipio);
 
-    private String leerTipoAsistencia() {
-        while (true) {
-            System.out.print("Selecciona tipo de asistencia (herida / parada cardiaca / inconsciencia): ");
-            String tipo = sc.nextLine().trim().toLowerCase();
-
-            if (tipo.equals("herida") || tipo.equals("parada cardiaca")
-                    || tipo.equals("parada cardíaca") || tipo.equals("inconsciencia")) {
-                return tipo;
-            }
-
-            System.out.println("Tipo no válido. Introduce: herida, parada cardiaca o inconsciencia.");
-        }
-    }
-
-    private String leerTextoNoVacio(String mensaje) {
-        while (true) {
-            System.out.print(mensaje);
-            String texto = sc.nextLine().trim();
-
-            if (!texto.isEmpty()) {
-                return texto;
-            }
-
-            System.out.println("Este campo no puede estar vacío.");
-        }
+        return new ResultadoEmergencia(
+                evento,
+                resumenAlerta,
+                protocolo,
+                inventario,
+                centros,
+                textoCentros
+        );
     }
 }

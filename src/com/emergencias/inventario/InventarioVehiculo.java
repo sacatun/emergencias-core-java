@@ -2,29 +2,29 @@ package com.emergencias.inventario;
 
 public class InventarioVehiculo {
 
-    public void mostrarRecursosDisponibles(String tipoEmergencia, String gravedad) {
+    public String obtenerRecursosDisponibles(String tipoEmergencia, String gravedad) {
         String tipoNormalizado = tipoEmergencia.trim().toLowerCase();
+        StringBuilder recursos = new StringBuilder();
 
-        System.out.println();
-        System.out.println("=== INVENTARIO DEL VEHÍCULO ===");
-        System.out.println("Gravedad detectada: " + gravedad);
-
-        System.out.println("Recursos base disponibles:");
-        System.out.println("- Botiquín");
-        System.out.println("- Manta térmica");
+        recursos.append("=== INVENTARIO DEL VEHÍCULO ===\n");
+        recursos.append("Gravedad detectada: ").append(gravedad).append("\n");
+        recursos.append("Recursos base disponibles:\n");
+        recursos.append("- Botiquín\n");
+        recursos.append("- Manta térmica\n");
 
         if (tipoNormalizado.equals("parada cardiaca") || tipoNormalizado.equals("parada cardíaca")) {
-            System.out.println("- Desfibrilador: DESBLOQUEADO");
+            recursos.append("- Desfibrilador: DESBLOQUEADO\n");
         } else {
-            System.out.println("- Desfibrilador: disponible solo para emergencia cardiaca");
+            recursos.append("- Desfibrilador: disponible solo para emergencia cardiaca\n");
         }
 
         if (gravedad.equalsIgnoreCase("grave")) {
-            System.out.println("- Señalización de emergencia recomendada");
-            System.out.println("- Prioridad máxima de asistencia");
+            recursos.append("- Señalización de emergencia recomendada\n");
+            recursos.append("- Prioridad máxima de asistencia\n");
         }
 
-        System.out.println("===============================");
-        System.out.println();
+        recursos.append("===============================");
+
+        return recursos.toString();
     }
 }
