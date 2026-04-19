@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class ConexionBD {
     private static final String URL_DEFECTO = "jdbc:mysql://localhost:3306/emergencias";
     private static final String USUARIO_DEFECTO = "root";
-    private static final String PASSWORD_DEFECTO = "6EQUJ5";
+    private static final String PASSWORD_DEFECTO = "";
 
     public Connection abrir() throws SQLException {
         String url = obtenerVariableEntorno("EMERGENCIAS_DB_URL", URL_DEFECTO);

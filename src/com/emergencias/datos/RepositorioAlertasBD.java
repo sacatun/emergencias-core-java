@@ -54,6 +54,8 @@ public class RepositorioAlertasBD {
     }
 
     public List<AlertaRegistrada> listarUltimas(int limite) throws SQLException {
+        int limiteNormalizado = Math.max(1, limite);
+
         String sql = "SELECT id, fecha_hora, tipo_emergencia, ubicacion, gravedad, " +
                 "paciente_nombre, metodo_envio " +
                 "FROM alertas_emergencia " +
@@ -65,7 +67,7 @@ public class RepositorioAlertasBD {
         try (Connection conexion = conexionBD.abrir();
              PreparedStatement ps = conexion.prepareStatement(sql)) {
 
-            ps.setInt(1, limite);
+            ps.setInt(1, limiteNormalizado);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -83,5 +85,56 @@ public class RepositorioAlertasBD {
         }
 
         return alertas;
+    }
+
+    public AlertaRegistrada buscarPorId(int id) throws SQLException {
+        String sql = "SELECT id, fecha_hora, tipo_emergencia, ubicacion, gravedad, " +
+                "paciente_nombre, metodo_envio " +
+                "FROM alertas_emergencia WHERE id = ?";
+
+        try (Connection conexion = conexionBD.abrir();
+             PreparedStatement ps = conexion.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new AlertaRegistrada(
+                            rs.getInt("id"),
+                            rs.getTimestamp("fecha_hora").toLocalDateTime(),
+                            rs.getString("tipo_emergencia"),
+                            rs.getString("ubicacion"),
+                            rs.getString("gravedad"),
+                            rs.getString("paciente_nombre"),
+                            rs.getString("metodo_envio")
+                    );
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public boolean actualizarMetodoEnvio(int id, String nuevoMetodoEnvio) throws SQLException {
+        String sql = "UPDATE alertas_emergencia SET metodo_envio = ? WHERE id = ?";
+
+        try (Connection conexion = conexionBD.abrir();
+             PreparedStatement ps = conexion.prepareStatement(sql)) {
+
+            ps.setString(1, nuevoMetodoEnvio);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public boolean eliminarPorId(int id) throws SQLException {
+        String sql = "DELETE FROM alertas_emergencia WHERE id = ?";
+
+        try (Connection conexion = conexionBD.abrir();
+             PreparedStatement ps = conexion.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        }
     }
 }
