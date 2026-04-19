@@ -1,44 +1,28 @@
 package com.emergencias.principal;
 
-import com.emergencias.alerta.EnviadorAlertas;
-import com.emergencias.asistencia.ProtocoloPrimerosAuxilios;
-import com.emergencias.controlador.GestorEmergencias;
-import com.emergencias.detector.DetectorEmergencia;
-import com.emergencias.inventario.InventarioVehiculo;
-import com.emergencias.recursos.LocalizadorRecursos;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class AplicacionPrincipal {
+public class AplicacionPrincipal extends Application {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        FXMLLoader cargador = new FXMLLoader(
+                getClass().getClassLoader().getResource("com/emergencias/resources/vista_emergencias.fxml")
+        );
+
+        Scene escena = new Scene(cargador.load(), 1000, 700);
+        escena.getStylesheets().add(
+                getClass().getClassLoader().getResource("com/emergencias/resources/estilos.css").toExternalForm()
+        );
+        stage.setTitle("Sistema de Gestión de Emergencias");
+        stage.setScene(escena);
+        stage.show();
+    }
 
     public static void main(String[] args) {
-
-        // --- Inicialización de componentes del sistema ---
-
-        DetectorEmergencia detector = new DetectorEmergencia("Accidente de tráfico", 5);
-
-        EnviadorAlertas enviador = new EnviadorAlertas(
-                "112",
-                "alertas.txt",
-                "SMS"
-        );
-
-        ProtocoloPrimerosAuxilios protocolo = new ProtocoloPrimerosAuxilios();
-
-        LocalizadorRecursos localizador = new LocalizadorRecursos();
-
-        InventarioVehiculo inventario = new InventarioVehiculo();
-
-
-        // --- Gestor principal del sistema ---
-        GestorEmergencias gestor = new GestorEmergencias(
-                detector,
-                enviador,
-                protocolo,
-                localizador,
-                inventario
-        );
-
-
-        // --- Inicio del sistema ---
-        gestor.iniciarSistema();
+        launch(args);
     }
 }

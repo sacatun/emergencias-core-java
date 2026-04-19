@@ -25,3 +25,93 @@ Nombre usuario:
 Teléfono: 545
 Email: 465
 ------------------------
+=== ALERTA ===
+Fecha/hora: 2026-03-28T12:16:17.463347400
+=== ENVIANDO ALERTA ===
+Destino: 112 | Método: SMS
+Tipo de emergencia: Accidente de tráfico
+Ubicación: Avenida de la Libertad
+Gravedad: grave
+Paciente identificado: Roberto Pérez
+Teléfono: 600123123
+Grupo sanguíneo: A+
+Alergias: Ninguna
+Medicación: Ninguna
+Contacto de emergencia: Ana Pérez - 600999999
+========================
+------------------------
+=== ALERTA ===
+Fecha/hora: 2026-03-28T12:28:00.750524
+=== ENVIANDO ALERTA ===
+Destino: 112 | Método: SMS
+Tipo de emergencia: Accidente de tráfico
+Ubicación: Avenida de la Libertad
+Gravedad: grave
+Paciente identificado: Roberto Pérez
+Teléfono: 600123123
+Grupo sanguíneo: A+
+Alergias: Ninguna
+Medicación: Ninguna
+Contacto de emergencia: Ana Pérez - 600999999
+========================
+------------------------
+=== ALERTA ===
+Fecha/hora: 2026-03-28T12:33:54.565056300
+=== ENVIANDO ALERTA ===
+Destino: 112 | Método: SMS
+Tipo de emergencia: Accidente
+Ubicación: dsfs
+Gravedad: moderada
+Paciente identificado: Paciente
+Teléfono: 600000000
+Grupo sanguíneo: A+
+Alergias: Ninguna
+Medicación: Ninguna
+Contacto de emergencia: Contacto
+========================
+------------------------
+=== ALERTA ===
+Fecha/hora: 2026-03-28T12:39:43.555230800
+=== ENVIANDO ALERTA ===
+Destino: 112 | Método: SMS
+Tipo de emergencia: Accidente
+Ubicación: fdfs
+Gravedad: grave
+Paciente identificado: Paciente
+Teléfono: 600000000
+Grupo sanguíneo: A+
+Alergias: Ninguna
+Medicación: Ninguna
+Contacto de emergencia: Contacto
+========================
+------------------------
+=== ALERTA ===
+Fecha/hora: 2026-03-28T12:42:37.410560300
+=== ENVIANDO ALERTA ===
+Destino: 112 | Método: SMS
+Tipo de emergencia: Accidente
+Ubicación: Avenida de Elche
+Gravedad: grave
+Paciente identificado: Paciente
+Teléfono: 600000000
+Grupo sanguíneo: A+
+Alergias: Ninguna
+Medicación: Ninguna
+Contacto de emergencia: Contacto
+========================
+------------------------
+=== ALERTA ===
+Fecha/hora: 2026-03-30T16:05:36.834040500
+=== ENVIANDO ALERTA ===
+Destino: 112 | Método: SMS
+Tipo de emergencia: Accidente
+Ubicación: Avenida de Elche
+Gravedad: grave
+Paciente identificado: Paciente
+Teléfono: 600000000
+Grupo sanguíneo: A+
+Alergias: Ninguna
+Medicación: Ninguna
+Contacto de emergencia: Contacto
+========================
+------------------------
