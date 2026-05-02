@@ -2,8 +2,10 @@ package com.emergencias.controlador;
 
 import com.emergencias.alerta.EnviadorAlertas;
 import com.emergencias.asistencia.ProtocoloPrimerosAuxilios;
+import com.emergencias.datos.RepositorioAlertasBD;
 import com.emergencias.detector.DetectorEmergencia;
 import com.emergencias.inventario.InventarioVehiculo;
+import com.emergencias.modelo.AlertaRegistrada;
 import com.emergencias.modelo.FichaMedica;
 import com.emergencias.modelo.ResultadoEmergencia;
 import com.emergencias.recursos.LocalizadorRecursos;
@@ -11,6 +13,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class ControladorVistaEmergencias {
 
@@ -30,9 +35,12 @@ public class ControladorVistaEmergencias {
     private TextArea areaResultado;
 
     private GestorEmergencias gestor;
+    private RepositorioAlertasBD repositorioAlertasBD;
 
     @FXML
     public void initialize() {
+        repositorioAlertasBD = new RepositorioAlertasBD();
+
         gestor = new GestorEmergencias(
                 new DetectorEmergencia("Accidente", 5),
                 new EnviadorAlertas("112", "alertas.txt", "SMS"),
@@ -79,12 +87,12 @@ public class ControladorVistaEmergencias {
             int gravedad = Integer.parseInt(textoGravedad);
 
             FichaMedica ficha = new FichaMedica(
-                    "Paciente",
-                    "600000000",
+                    "María López García",
+                    "612345678",
                     "A+",
-                    "Ninguna",
-                    "Ninguna",
-                    "Contacto"
+                    "Penicilina",
+                    "Ibuprofeno ocasional",
+                    "Juan López - 698765432"
             );
 
             ResultadoEmergencia resultado = gestor.procesarEmergencia(
@@ -112,6 +120,34 @@ public class ControladorVistaEmergencias {
             areaResultado.setText("Error: la gravedad debe ser un número entero.");
         } catch (Exception e) {
             areaResultado.setText("Error: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void mostrarUltimasAlertas() {
+        try {
+            List<AlertaRegistrada> alertas = repositorioAlertasBD.listarUltimas(5);
+
+            if (alertas.isEmpty()) {
+                areaResultado.setText("No hay alertas guardadas en la base de datos.");
+                return;
+            }
+
+            StringBuilder texto = new StringBuilder("Últimas alertas guardadas en MySQL:\n\n");
+            for (AlertaRegistrada alerta : alertas) {
+                texto.append("#").append(alerta.getId())
+                        .append(" | ").append(alerta.getFechaHora())
+                        .append(" | ").append(alerta.getTipoEmergencia())
+                        .append(" | ").append(alerta.getUbicacion())
+                        .append(" | Gravedad: ").append(alerta.getGravedad())
+                        .append(" | Paciente: ").append(alerta.getPacienteNombre())
+                        .append(" | Método: ").append(alerta.getMetodoEnvio())
+                        .append("\n");
+            }
+
+            areaResultado.setText(texto.toString());
+        } catch (SQLException e) {
+            areaResultado.setText("No se pudieron consultar las alertas en la base de datos: " + e.getMessage());
         }
     }
 }

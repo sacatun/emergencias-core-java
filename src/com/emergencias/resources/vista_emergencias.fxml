@@ -6,10 +6,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="15"
-      alignment="CENTER"
+<VBox spacing="18"
+      alignment="TOP_CENTER"
+      styleClass="root-panel"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.emergencias.controlador.ControladorVistaEmergencias">
 
@@ -19,16 +22,68 @@
 
     <children>
 
-        <Label text="🚑 Sistema de Gestión de Emergencias" />
+        <VBox spacing="6" alignment="CENTER" styleClass="cabecera">
+            <children>
+                <Label text="🚑 Sistema de Gestión de Emergencias" styleClass="titulo" />
+                <Label text="Registro de alerta, protocolo de actuación y persistencia en MySQL" styleClass="subtitulo" />
+            </children>
+        </VBox>
 
-        <TextField fx:id="campoUbicacion" promptText="Ubicación" />
-        <TextField fx:id="campoGravedad" promptText="Gravedad (0-10)" />
-        <ComboBox fx:id="comboTipoAsistencia" promptText="Tipo de asistencia" />
-        <TextField fx:id="campoMunicipio" promptText="Municipio" />
+        <VBox spacing="10" styleClass="bloque">
+            <children>
+                <Label text="Datos de la emergencia" styleClass="titulo-seccion" />
 
-        <Button text="Procesar Emergencia" onAction="#procesarEmergencia" />
+                <GridPane hgap="14" vgap="10">
+                    <children>
+                        <Label text="Calle o ubicación" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                        <TextField fx:id="campoUbicacion"
+                                   promptText="Ejemplo: Avenida de la Libertad 12"
+                                   GridPane.rowIndex="1"
+                                   GridPane.columnIndex="0" />
 
-        <TextArea fx:id="areaResultado" prefWidth="600" prefHeight="300" wrapText="true" />
+                        <Label text="Nivel de emergencia (0-10)" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                        <TextField fx:id="campoGravedad"
+                                   promptText="Ejemplo: 8"
+                                   GridPane.rowIndex="1"
+                                   GridPane.columnIndex="1" />
+                        <Label text="0-4: sin alerta · 5-7: moderada · 8-10: grave"
+                               styleClass="texto-ayuda"
+                               GridPane.rowIndex="2"
+                               GridPane.columnIndex="1" />
+
+                        <Label text="Tipo de asistencia" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                        <ComboBox fx:id="comboTipoAsistencia"
+                                  promptText="Selecciona una opción"
+                                  GridPane.rowIndex="4"
+                                  GridPane.columnIndex="0" />
+
+                        <Label text="Municipio" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                        <TextField fx:id="campoMunicipio"
+                                   promptText="Ejemplo: Murcia"
+                                   GridPane.rowIndex="4"
+                                   GridPane.columnIndex="1" />
+                    </children>
+                </GridPane>
+            </children>
+        </VBox>
+
+        <HBox spacing="10" alignment="CENTER">
+            <children>
+                <Button text="Procesar Emergencia" onAction="#procesarEmergencia" />
+                <Button text="Ver alertas guardadas" onAction="#mostrarUltimasAlertas" />
+            </children>
+        </HBox>
+
+        <VBox spacing="10" styleClass="bloque">
+            <children>
+                <Label text="Resultado y consultas" styleClass="titulo-seccion" />
+                <TextArea fx:id="areaResultado"
+                          prefHeight="300"
+                          wrapText="true"
+                          editable="false"
+                          text="Introduce los datos de la emergencia y pulsa 'Procesar Emergencia'. También puedes consultar las últimas alertas guardadas en MySQL." />
+            </children>
+        </VBox>
 
     </children>
 </VBox>
