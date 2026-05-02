@@ -27,6 +27,7 @@ public class RepositorioAlertasBD {
     public void guardar(EventoEmergencia evento, String destino, String metodoEnvio, LocalDateTime fechaHora)
             throws SQLException {
 
+        // INSERT parametrizado para guardar una alerta completa en MySQL.
         String sql = "INSERT INTO alertas_emergencia (" +
                 "fecha_hora, destino, metodo_envio, tipo_emergencia, ubicacion, gravedad, " +
                 "paciente_nombre, paciente_telefono, grupo_sanguineo, alergias, medicacion, contacto_emergencia" +
@@ -37,6 +38,7 @@ public class RepositorioAlertasBD {
         try (Connection conexion = conexionBD.abrir();
              PreparedStatement ps = conexion.prepareStatement(sql)) {
 
+            // PreparedStatement separa la sentencia SQL de los datos introducidos.
             ps.setTimestamp(1, Timestamp.valueOf(fechaHora));
             ps.setString(2, destino);
             ps.setString(3, metodoEnvio);
@@ -56,6 +58,7 @@ public class RepositorioAlertasBD {
     public List<AlertaRegistrada> listarUltimas(int limite) throws SQLException {
         int limiteNormalizado = Math.max(1, limite);
 
+        // Consulta de solo lectura para mostrar las últimas alertas registradas.
         String sql = "SELECT id, fecha_hora, tipo_emergencia, ubicacion, gravedad, " +
                 "paciente_nombre, metodo_envio " +
                 "FROM alertas_emergencia " +
@@ -88,6 +91,7 @@ public class RepositorioAlertasBD {
     }
 
     public AlertaRegistrada buscarPorId(int id) throws SQLException {
+        // Búsqueda individual usando la clave primaria de la tabla.
         String sql = "SELECT id, fecha_hora, tipo_emergencia, ubicacion, gravedad, " +
                 "paciente_nombre, metodo_envio " +
                 "FROM alertas_emergencia WHERE id = ?";
@@ -116,6 +120,7 @@ public class RepositorioAlertasBD {
     }
 
     public boolean actualizarMetodoEnvio(int id, String nuevoMetodoEnvio) throws SQLException {
+        // UPDATE acotado por id para modificar solo una alerta.
         String sql = "UPDATE alertas_emergencia SET metodo_envio = ? WHERE id = ?";
 
         try (Connection conexion = conexionBD.abrir();
@@ -128,6 +133,7 @@ public class RepositorioAlertasBD {
     }
 
     public boolean eliminarPorId(int id) throws SQLException {
+        // DELETE acotado por id para evitar borrar registros no deseados.
         String sql = "DELETE FROM alertas_emergencia WHERE id = ?";
 
         try (Connection conexion = conexionBD.abrir();

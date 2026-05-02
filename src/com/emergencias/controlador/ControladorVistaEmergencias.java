@@ -87,12 +87,12 @@ public class ControladorVistaEmergencias {
             int gravedad = Integer.parseInt(textoGravedad);
 
             FichaMedica ficha = new FichaMedica(
-                    "Paciente",
-                    "600000000",
+                    "María López García",
+                    "612345678",
                     "A+",
-                    "Ninguna",
-                    "Ninguna",
-                    "Contacto"
+                    "Penicilina",
+                    "Ibuprofeno ocasional",
+                    "Juan López - 698765432"
             );
 
             ResultadoEmergencia resultado = gestor.procesarEmergencia(
