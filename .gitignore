@@ -33,3 +33,4 @@ bin/
 out/
 *.iml
 alertas.txt
+lib/mysql-connector-j-*.jar
